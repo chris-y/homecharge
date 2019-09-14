@@ -23,7 +23,10 @@ def requires_login(func):
 
 
 class APIException(Exception):
-    pass
+    def __init__(self, code, message, data=None):
+        self.code = code
+        self.message = message
+        self.data = data
 
 
 class Period(Enum):
@@ -93,12 +96,13 @@ class Client(object):
             result.raise_for_status()
         except requests.exceptions.HTTPError as e:
             try:
-                msg = result.json().get('message')
+                data = result.json()
+                msg = data.get('message')
                 if msg:
-                    raise APIException(msg)
+                    raise APIException(result.status_code, msg, data)
                 raise e
             except simplejson.JSONDecodeError:
-                raise APIException(result.text)
+                raise APIException(result.status_code, result.text)
 
         return result.json()['data']
 
@@ -156,7 +160,7 @@ class Client(object):
         if schedule._id:
             return self._post(
                 'schedule/delete',
-                json: {
+                json={
                     blockid: schedule._id
                 }
             )
