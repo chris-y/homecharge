@@ -161,7 +161,7 @@ class Client(object):
             return self._post(
                 'schedule/delete',
                 json={
-                    blockid: schedule._id
+                    'blockid': schedule._id
                 }
             )
 
