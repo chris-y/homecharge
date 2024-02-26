@@ -123,7 +123,7 @@ class Client(object):
             params={
                 'page': page
             }
-        ).json().get('data')
+        )
 
     def override(self):
         '''Override schedule and charge immediately.'''
