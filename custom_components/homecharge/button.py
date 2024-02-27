@@ -6,7 +6,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
 from . import DOMAIN
-
+from . import homecharge
 
 def setup_platform(
     hass: HomeAssistant,
@@ -27,5 +27,14 @@ class OverrideButton(ButtonEntity):
         return "Homecharge charge now"
 
     def press(self) -> None:
-        hc = self.hass.data[DOMAIN]['hc']
-        hc.override()
+        hc = homecharge.Client()
+        if hc:
+            email = self.hass.data[DOMAIN]['user']
+            pw = self.hass.data[DOMAIN]['pass']
+
+            try:
+                apikey = hc.login(email, pw)
+            except:
+                return
+
+            hc.override()

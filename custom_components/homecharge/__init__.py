@@ -39,7 +39,9 @@ def setup(hass, config):
                         hass.states.set("homecharge.serial", hcstatus['serial'])
                         
                         hass.data[DOMAIN] = {
-                                'hc': hc
+                                'hc': hc,
+                                'user': email,
+                                'pass': pw
                         }
 
                         hass.helpers.discovery.load_platform('button', DOMAIN, {}, config)
