@@ -35,6 +35,9 @@ def setup(hass, config):
                         return False
 
                 if apikey:
+                        hcstatus = hc.get_status()
+                        hass.states.set("homecharge.serial", hcstatus['serial'])
+                        
                         hass.data[DOMAIN] = {
                                 'hc': hc
                         }
