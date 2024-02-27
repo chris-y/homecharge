@@ -125,6 +125,11 @@ class Client(object):
             }
         )
 
+    def get_status(self):
+        return self._post(
+            'status'
+        )
+
     def override(self):
         '''Override schedule and charge immediately.'''
         return self._post(

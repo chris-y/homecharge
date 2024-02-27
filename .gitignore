@@ -39,3 +39,6 @@ nosetests.xml
 # Project-specific
 venv/
 .vscode
+
+test.py
+
