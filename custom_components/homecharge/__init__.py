@@ -1,4 +1,10 @@
+from __future__ import annotations
+
 from . import homecharge
+
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.typing import ConfigType
+
 
 import voluptuous as vol
 import homeassistant.helpers.config_validation as cv
@@ -17,18 +23,26 @@ CONFIG_SCHEMA = vol.Schema({
 
 
 def setup(hass, config):
-	global hc
-	hc = homecharge.Client()
-	if hc:
-		email = config[DOMAIN].get(CONF_USER)
-		pw = config[DOMAIN].get(CONF_PASS)
+        global hc
+        hc = homecharge.Client()
+        if hc:
+                email = config[DOMAIN].get(CONF_USER)
+                pw = config[DOMAIN].get(CONF_PASS)
 
-		try:
-			apikey = hc.login(email, pw)
-		except:
-			return False
+                try:
+                        apikey = hc.login(email, pw)
+                except:
+                        return False
 
-		if apikey:
-			return True
-	return False
+                if apikey:
+                        hass.data[DOMAIN] = {
+                                'hc': hc
+                        }
+
+                        hass.helpers.discovery.load_platform('button', DOMAIN, {}, config)
+
+                        return True
+
+        return False
+
 
