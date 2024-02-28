@@ -34,16 +34,8 @@ class OverrideSwitch(SwitchEntity):
         return self.hass.data[DOMAIN]['override']
 
     def _toggle(self):
-        hc = homecharge.Client()
+        hc = self.hass.data[DOMAIN]['hc']
         if hc:
-            email = self.hass.data[DOMAIN]['user']
-            pw = self.hass.data[DOMAIN]['pass']
-
-            try:
-                apikey = hc.login(email, pw)
-            except:
-                return
-
             hc.override()
             hcstatus = hc.get_status()
             hc_cur_status = hcstatus['status']
@@ -57,20 +49,11 @@ class OverrideSwitch(SwitchEntity):
         return self._toggle()
 
     def update(self):
-        hc = homecharge.Client()
+        hc = self.hass.data[DOMAIN]['hc']
         if hc:
-            email = self.hass.data[DOMAIN]['user']
-            pw = self.hass.data[DOMAIN]['pass']
-            
-            try:
-                apikey = hc.login(email.pw)
-            except:
-                return
+            hcstatus = hc.get_status()
+            hc_cur_status = hcstatus['status']
                 
-            if apikey:
-                hcstatus = hc.get_status()
-                hc_cur_status = hcstatus['status']
-                
-                self.hass.data[DOMAIN]['override'] = hc_cur_status['override']
-                return
-    
+            self.hass.data[DOMAIN]['override'] = hc_cur_status['override']
+            return
+

@@ -39,20 +39,11 @@ class ChargingSensor(BinarySensorEntity):
         return self.hass.data[DOMAIN]['advice_charging']
 
     def update(self):
-        hc = homecharge.Client()
+        hc = self.hass.data[DOMAIN]['hc']
         if hc:
-            email = self.hass.data[DOMAIN]['user']
-            pw = self.hass.data[DOMAIN]['pass']
-            
-            try:
-                apikey = hc.login(email.pw)
-            except:
-                return
+            hcstatus = hc.get_status()
+            hc_cur_status = hcstatus['status']
                 
-            if apikey:
-                hcstatus = hc.get_status()
-                hc_cur_status = hcstatus['status']
-                
-                self.hass.data[DOMAIN]['advice_charging'] = hc_cur_status['advice_charging']
-                return
-    
+            self.hass.data[DOMAIN]['advice_charging'] = hc_cur_status['advice_charging']
+            self.hass.data[DOMAIN]['override'] = hc_cur_status['override']
+            return
