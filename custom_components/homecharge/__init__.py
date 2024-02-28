@@ -23,30 +23,32 @@ CONFIG_SCHEMA = vol.Schema({
 
 
 def setup(hass, config):
-        global hc
-        hc = homecharge.Client()
-        if hc:
-                email = config[DOMAIN].get(CONF_USER)
-                pw = config[DOMAIN].get(CONF_PASS)
+    hc = homecharge.Client()
+    if hc:
+        email = config[DOMAIN].get(CONF_USER)
+        pw = config[DOMAIN].get(CONF_PASS)
 
-                try:
-                        apikey = hc.login(email, pw)
-                except:
-                        return False
+        try:
+            apikey = hc.login(email, pw)
+        except:
+            return False
 
-                if apikey:
-                        hcstatus = hc.get_status()
-                        hass.states.set("homecharge.serial", hcstatus['serial'])
-                        
-                        hass.data[DOMAIN] = {
-                                'hc': hc,
-                                'user': email,
-                                'pass': pw
-                        }
+        if apikey:
+            hcstatus = hc.get_status()
+            hass.states.set("homecharge.serial", hcstatus['serial'])
+            
+            hc_cur_status = hcstatus['status']
+            
+            hass.data[DOMAIN] = {
+                'hc': hc,
+                'user': email,
+                'pass': pw,
+                'override': hc_cur_status['override']
+            }
 
-                        hass.helpers.discovery.load_platform('button', DOMAIN, {}, config)
+            hass.helpers.discovery.load_platform('switch', DOMAIN, {}, config)
 
-                        return True
+            return True
 
         return False
 
