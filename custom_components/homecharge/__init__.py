@@ -44,12 +44,14 @@ def setup(hass, config):
                 'user': email,
                 'pass': pw,
                 'override': hc_cur_status['override'],
-                'advice_charging': hc_cur_status['advice_charging']
+                'advice_charging': hc_cur_status['advice_charging'],
+                'advice_header': hc_cur_status['advice_header']
             }
 
             hass.helpers.discovery.load_platform('switch', DOMAIN, {}, config)
             hass.helpers.discovery.load_platform('binary_sensor', DOMAIN, {}, config)
-
+            hass.helpers.discovery.load_platform('sensor', DOMAIN, {}, config)
+            
             return True
 
         return False
