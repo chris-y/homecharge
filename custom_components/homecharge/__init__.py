@@ -45,7 +45,10 @@ def setup(hass, config):
                 'pass': pw,
                 'override': hc_cur_status['override'],
                 'advice_charging': hc_cur_status['advice_charging'],
-                'advice_header': hc_cur_status['advice_header']
+                'advice_header': hc_cur_status['advice_header'],
+                'advice_message': hc_cur_status['advice_message'],
+                'power' : hc_cur_status['power'],
+                'power_reason': hc_cur_status['power_reason']
             }
 
             hass.helpers.discovery.load_platform('switch', DOMAIN, {}, config)

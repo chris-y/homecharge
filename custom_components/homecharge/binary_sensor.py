@@ -48,6 +48,10 @@ class ChargingSensor(BinarySensorEntity):
             
             # update everything else too
             self.hass.data[DOMAIN]['advice_header'] = hc_cur_status['advice_header']
+            self.hass.data[DOMAIN]['advice_message'] = hc_cur_status['advice_message']
+            self.hass.data[DOMAIN]['power'] = hc_cur_status['power']
+            self.hass.data[DOMAIN]['power_reason'] = hc_cur_status['power_reason']
+            
             self.hass.data[DOMAIN]['override'] = hc_cur_status['override']
 
             return
