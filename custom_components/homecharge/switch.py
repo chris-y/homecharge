@@ -27,7 +27,7 @@ class OverrideSwitch(SwitchEntity):
         return "Homecharge schedule override"
         
     def __init__(self):
-        '''init''' #self._is_on = self.hass.data[DOMAIN]['override']
+        '''init'''
         
     @property
     def is_on(self):
@@ -36,24 +36,19 @@ class OverrideSwitch(SwitchEntity):
     def _toggle(self):
         hc = self.hass.data[DOMAIN]['hc']
         if hc:
-            hc.override()
+            try:
+                hc.override()
+            except:
+                return
+            
             hcstatus = hc.get_status()
             hc_cur_status = hcstatus['status']
-            self.hass.data[DOMAIN]['override'] = hc_cur_status['override']
-            
-            
+
+            if override in hc_cur_status:
+                self.hass.data[DOMAIN]['override'] = hc_cur_status['override']
+
     def turn_on(self, **kwargs):
         return self._toggle()
         
     def turn_off(self, **kwargs):
         return self._toggle()
-
-    def update(self):
-        hc = self.hass.data[DOMAIN]['hc']
-        if hc:
-            hcstatus = hc.get_status()
-            hc_cur_status = hcstatus['status']
-                
-            self.hass.data[DOMAIN]['override'] = hc_cur_status['override']
-            return
-
