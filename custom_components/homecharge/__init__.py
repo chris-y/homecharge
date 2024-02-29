@@ -39,16 +39,31 @@ def setup(hass, config):
             
             hc_cur_status = hcstatus['status']
             
+            if 'override' in hc_cur_status:
+                override = hc_cur_status['override']
+            else:
+                override = False
+                
+            if 'power' in hc_cur_status:
+                power = hc_cur_status['power']
+            else:
+                power = 0
+            
+            if 'power_reason' in hc_cur_status:
+                power_reason = hc_cur_status['power_reason']
+            else:
+                power_reason = ''
+            
             hass.data[DOMAIN] = {
                 'hc': hc,
                 'user': email,
                 'pass': pw,
-                'override': hc_cur_status['override'],
+                'override': override,
                 'advice_charging': hc_cur_status['advice_charging'],
                 'advice_header': hc_cur_status['advice_header'],
                 'advice_message': hc_cur_status['advice_message'],
-                'power' : hc_cur_status['power'],
-                'power_reason': hc_cur_status['power_reason']
+                'power' : power,
+                'power_reason': power_reason
             }
 
             hass.helpers.discovery.load_platform('switch', DOMAIN, {}, config)

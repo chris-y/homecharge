@@ -43,15 +43,29 @@ class ChargingSensor(BinarySensorEntity):
         if hc:
             hcstatus = hc.get_status()
             hc_cur_status = hcstatus['status']
-
-            self.hass.data[DOMAIN]['advice_charging'] = hc_cur_status['advice_charging']
+            
+            if 'advice_charging' in hc_cur_status:
+                self.hass.data[DOMAIN]['advice_charging'] = hc_cur_status['advice_charging']
+            else:
+                self.hass.data[DOMAIN]['advice_charging'] = False
             
             # update everything else too
             self.hass.data[DOMAIN]['advice_header'] = hc_cur_status['advice_header']
             self.hass.data[DOMAIN]['advice_message'] = hc_cur_status['advice_message']
-            self.hass.data[DOMAIN]['power'] = hc_cur_status['power']
-            self.hass.data[DOMAIN]['power_reason'] = hc_cur_status['power_reason']
             
-            self.hass.data[DOMAIN]['override'] = hc_cur_status['override']
+            if 'power' in hc_cur_status:
+                self.hass.data[DOMAIN]['power'] = hc_cur_status['power']
+            else:
+                self.hass.data[DOMAIN]['power'] = 0
+            
+            if 'power_reason' in hc_cur_status:
+                self.hass.data[DOMAIN]['power_reason'] = hc_cur_status['power_reason']
+            else:
+                self.hass.data[DOMAIN]['power_reason'] = ''
+            
+            if 'override' in hc_cur_status:
+                self.hass.data[DOMAIN]['override'] = hc_cur_status['override']
+            else:
+                self.hass.data[DOMAIN]['override'] = False
 
             return
