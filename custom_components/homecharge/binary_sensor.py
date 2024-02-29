@@ -59,14 +59,6 @@ class ChargingSensor(BinarySensorEntity):
                 self.hass.data[DOMAIN]['override'] = hc_cur_status['override']
                 self.hass.data[DOMAIN]['started_ts'] = hc_cur_status['started_ts']
                 self.hass.data[DOMAIN]['energy'] = hc_cur_status['energy']
-                
-                hc_charges = get_charges()
-                hc_cur_charge = hc_charges['recharges'][0]
-                
-                if hc_cur_charge['charge_id'] == hc_cur_status['charge_id']:
-                    self.hass.data[DOMAIN]['c_duration'] = hc_cur_charge['duration']
-                    self.hass.data[DOMAIN]['c_energy'] = hc_cur_charge['energy']
-            
             else:
                 self.hass.data[DOMAIN]['advice_charging'] = False
                 self.hass.data[DOMAIN]['power'] = 0
@@ -74,7 +66,5 @@ class ChargingSensor(BinarySensorEntity):
                 self.hass.data[DOMAIN]['override'] = False
                 self.hass.data[DOMAIN]['started_ts'] = None
                 self.hass.data[DOMAIN]['energy'] = 0
-                self.hass.data[DOMAIN]['c_duration'] = None
-                self.hass.data[DOMAIN]['c_energy'] = 0
 
             return
