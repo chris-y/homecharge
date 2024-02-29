@@ -44,28 +44,37 @@ class ChargingSensor(BinarySensorEntity):
             hcstatus = hc.get_status()
             hc_cur_status = hcstatus['status']
             
-            if 'advice_charging' in hc_cur_status:
-                self.hass.data[DOMAIN]['advice_charging'] = hc_cur_status['advice_charging']
-            else:
-                self.hass.data[DOMAIN]['advice_charging'] = False
-            
-            # update everything else too
+            # update everything
             self.hass.data[DOMAIN]['advice_header'] = hc_cur_status['advice_header']
             self.hass.data[DOMAIN]['advice_message'] = hc_cur_status['advice_message']
+            self.hass.data[DOMAIN]['advice_schedule'] = hc_cur_status['advice_schedule']
+            self.hass.data[DOMAIN]['advice_chargelevel'] = hc_cur_status['advice_chargelevel']
+            self.hass.data[DOMAIN]['advice_maxkwh'] = hc_cur_status['advice_maxkwh']
+            self.hass.data[DOMAIN]['charge_id'] = hc_cur_status['charge_id']
             
-            if 'power' in hc_cur_status:
+            if hc_cur_status['charge_id'] is not None:
+                self.hass.data[DOMAIN]['advice_charging'] = hc_cur_status['advice_charging']
                 self.hass.data[DOMAIN]['power'] = hc_cur_status['power']
-            else:
-                self.hass.data[DOMAIN]['power'] = 0
-            
-            if 'power_reason' in hc_cur_status:
                 self.hass.data[DOMAIN]['power_reason'] = hc_cur_status['power_reason']
-            else:
-                self.hass.data[DOMAIN]['power_reason'] = ''
-            
-            if 'override' in hc_cur_status:
                 self.hass.data[DOMAIN]['override'] = hc_cur_status['override']
+                self.hass.data[DOMAIN]['started_ts'] = hc_cur_status['started_ts']
+                self.hass.data[DOMAIN]['energy'] = hc_cur_status['energy']
+                
+                hc_charges = get_charges()
+                hc_cur_charge = hc_charges['recharges'][0]
+                
+                if hc_cur_charge['charge_id'] == hc_cur_status['charge_id']:
+                    self.hass.data[DOMAIN]['c_duration'] = hc_cur_charge['duration']
+                    self.hass.data[DOMAIN]['c_energy'] = hc_cur_charge['energy']
+            
             else:
+                self.hass.data[DOMAIN]['advice_charging'] = False
+                self.hass.data[DOMAIN]['power'] = 0
+                self.hass.data[DOMAIN]['power_reason'] = ''
                 self.hass.data[DOMAIN]['override'] = False
+                self.hass.data[DOMAIN]['started_ts'] = None
+                self.hass.data[DOMAIN]['energy'] = 0
+                self.hass.data[DOMAIN]['c_duration'] = None
+                self.hass.data[DOMAIN]['c_energy'] = 0
 
             return
