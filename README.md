@@ -4,6 +4,8 @@ This is an early attempt at a simple Home Assistant integration for BP Chargemas
 
 It is based on earlier work towards an unofficial API client by James Muscat.
 
+**Pretty much immediately after I got this working but not fully tested, my Homecharge unit decided to stop sending updates to Chargevision.  Hopefully this is a coincidence and it will come back.  For now, I have not been able to test monitoring of charging sessions and have suspended any work on this until it decides to communicate again (yes I have tried rebooting).**
+
 ## Installation
 
 This should be available through HACS in future which will make installation easier.  For now, copy `custom_components/homecharge` into your custom_components directory in your Home Assistant config dir.
