@@ -223,6 +223,10 @@ class TotalChargesSensor(SensorEntity):
         
     def __init__(self):
         '''init'''
+    
+    @property
+    def state_class(self):
+        return "total"
 
     @property
     def native_value(self):
