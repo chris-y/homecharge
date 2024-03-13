@@ -41,6 +41,7 @@ def setup(hass, config):
             c_energy = 0
             
             hc_cur_status = hcstatus['status']
+            hc_charges = hc.get_charges()
             
             if hc_cur_status['charge_id'] is not None:
                 advice_charging = hc_cur_status['advice_charging']
@@ -49,8 +50,7 @@ def setup(hass, config):
                 override = hc_cur_status['override']
                 started_ts = hc_cur_status['started_ts']
                 energy = hc_cur_status['energy']
-                
-                hc_charges = hc.get_charges()
+
                 hc_cur_charge = hc_charges['recharges'][0]
                 
                 if hc_cur_charge['charge_id'] == hc_cur_status['charge_id']:
@@ -82,6 +82,7 @@ def setup(hass, config):
                 'power_reason': power_reason,
                 'started_ts': started_ts,
                 'energy': 0,
+                'c_total': hc_charges['total'],
                 'c_duration': c_duration,
                 'c_energy': c_energy
             }

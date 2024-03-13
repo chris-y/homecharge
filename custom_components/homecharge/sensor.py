@@ -30,6 +30,7 @@ def setup_platform(
         EnergySensor(),
         PowerSensor(),
         PowerReasonSensor(),
+        TotalChargesSensor(),
         CurrentDurationSensor(),
         CurrentEnergySensor()])
 
@@ -212,6 +213,21 @@ class PowerReasonSensor(SensorEntity):
     def native_value(self):
         return self.hass.data[DOMAIN]['power_reason']
 
+
+class TotalChargesSensor(SensorEntity):
+    _attr_has_entity_name = True
+
+    @property
+    def name(self):
+        return "Homecharge total charges"
+        
+    def __init__(self):
+        '''init'''
+
+    @property
+    def native_value(self):
+        return self.hass.data[DOMAIN]['c_total']
+
 class CurrentDurationSensor(SensorEntity):
     _attr_has_entity_name = True
 
@@ -263,6 +279,7 @@ class CurrentEnergySensor(SensorEntity):
                     return
             
                 hc_charges = hc.get_charges()
+                self.hass.data[DOMAIN]['c_total'] = hc_charges['total']
                 hc_cur_charge = hc_charges['recharges'][0]
                 
                 if hc_cur_charge['charge_id'] == self.hass.data[DOMAIN]['charge_id']:
