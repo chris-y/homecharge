@@ -50,7 +50,7 @@ def setup(hass, config):
                 started_ts = hc_cur_status['started_ts']
                 energy = hc_cur_status['energy']
                 
-                hc_charges = get_charges()
+                hc_charges = hc.get_charges()
                 hc_cur_charge = hc_charges['recharges'][0]
                 
                 if hc_cur_charge['charge_id'] == hc_cur_status['charge_id']:

@@ -253,15 +253,21 @@ class CurrentEnergySensor(SensorEntity):
         return "total_increasing"
     
     def update(self):
-        hc = self.hass.data[DOMAIN]['hc']
-        if hc:
-            if self.hass.data[DOMAIN]['charge_id'] is not None:
+        if self.hass.data[DOMAIN]['charge_id'] is not None:
+            hc = homecharge.Client()
+            if hc:
+                self.hass.data[DOMAIN]['hc'] = hc
+                try:
+                    apikey = hc.login(self.hass.data[DOMAIN]['user'], self.hass.data[DOMAIN]['pass'])
+                except:
+                    return
+            
                 hc_charges = hc.get_charges()
                 hc_cur_charge = hc_charges['recharges'][0]
                 
                 if hc_cur_charge['charge_id'] == self.hass.data[DOMAIN]['charge_id']:
                     self.hass.data[DOMAIN]['c_duration'] = hc_cur_charge['duration']
                     self.hass.data[DOMAIN]['c_energy'] = hc_cur_charge['energy']
-            else:
-                self.hass.data[DOMAIN]['c_duration'] = None
-                self.hass.data[DOMAIN]['c_energy'] = 0
+                else:
+                    self.hass.data[DOMAIN]['c_duration'] = None
+                    self.hass.data[DOMAIN]['c_energy'] = 0
