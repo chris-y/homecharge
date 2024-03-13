@@ -173,7 +173,7 @@ class StartedSensor(SensorEntity):
     @property
     def native_value(self):
         if self.hass.data[DOMAIN]['started_ts'] is not None:
-            return datetime.datetime.fromtimestamp(self.hass.data[DOMAIN]['started_ts'])
+            return datetime.datetime.fromtimestamp(self.hass.data[DOMAIN]['started_ts']).astimezone()
         else:
             return None
 
