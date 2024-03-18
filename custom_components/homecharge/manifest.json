@@ -1,5 +1,8 @@
 {
 	"domain": "homecharge",
 	"name": "BP Homecharge",
+	"documentation": "https://github.com/chris-y/homecharge/blob/develop/README.md",
+	"issue_tracker": "https://github.com/chris-y/homecharge/issues",
+	"codeowners": ["chris-y", "jamesremuscat"],
 	"version": "0.0.1"
 }
