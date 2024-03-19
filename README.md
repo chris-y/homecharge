@@ -14,7 +14,8 @@ Add the repository:
 ### Manual
 Copy `custom_components/homecharge` into your custom_components directory in your Home Assistant config dir.
 
-Then, add the following to configuration.yaml:
+### Configuration
+Add the following to configuration.yaml:
 
 ```
 homecharge:
