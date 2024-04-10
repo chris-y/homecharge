@@ -31,7 +31,6 @@ def setup_platform(
         PowerSensor(),
         PowerReasonSensor(),
         TotalChargesSensor(),
-        CurrentDurationSensor(),
         CurrentEnergySensor()])
 
 class AdviceHeaderSensor(SensorEntity):
