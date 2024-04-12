@@ -5,6 +5,7 @@ from homeassistant.components.binary_sensor import BinarySensorDeviceClass
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
+from homeassistant.helpers.device_registry import DeviceInfo
 
 from . import DOMAIN
 from . import homecharge
@@ -28,12 +29,17 @@ class ChargingSensor(BinarySensorEntity):
         return "Homecharge charging"
         
     def __init__(self):
-        '''init''' #self._is_on = self.hass.data[DOMAIN]['override']
+        '''self._attr_unique_id = f"{DOMAIN}_{self.hass.data[DOMAIN]['unique_id']}_charging"'''
 
     @property
     def device_class(self):
         return BinarySensorDeviceClass.BATTERY_CHARGING
     
+    #@property
+    #def device_info(self) -> DeviceInfo:
+    #    """Return the device info."""
+    #    return self.hass.data[DOMAIN]['device']
+        
     @property
     def is_on(self):
         return self.hass.data[DOMAIN]['advice_charging']

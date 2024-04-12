@@ -4,6 +4,7 @@ from . import homecharge
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.typing import ConfigType
+from homeassistant.helpers.device_registry import DeviceInfo
 
 
 import voluptuous as vol
@@ -70,6 +71,7 @@ def setup(hass, config):
                 'hc': hc,
                 'user': email,
                 'pass': pw,
+                'unique_id': hcstatus['serial'],
                 'override': override,
                 'advice_charging': advice_charging,
                 'advice_header': hc_cur_status['advice_header'],
@@ -84,7 +86,16 @@ def setup(hass, config):
                 'energy': 0,
                 'c_total': hc_charges['total'],
                 'c_duration': c_duration,
-                'c_energy': c_energy
+                'c_energy': c_energy,
+                'device': DeviceInfo(
+                    identifiers={
+                        # Serial numbers are unique identifiers within a specific domain
+                        (DOMAIN, hcstatus['serial'])
+                    },
+                    name=f"Homecharge {hcstatus['serial']}",
+                    manufacturer="BP Chargemaster",
+                    model="Homecharge",
+                )
             }
 
             hass.helpers.discovery.load_platform('switch', DOMAIN, {}, config)
