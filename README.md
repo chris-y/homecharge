@@ -24,7 +24,7 @@ homecharge:
 
 ```
 
-If you restart Home Assistant it should log in and retrieve details, which for the moment appear under the generic sensors areas prefixed with Homecharge.
+If you restart Home Assistant it should log in and retrieve details, which appear under the generic sensors areas prefixed with Homecharge.  These can be moved into an area within the UI if required.
 
 ## Features
 
