@@ -4,6 +4,7 @@ from . import homecharge
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.typing import ConfigType
+from homeassistant.helpers.device_registry import DeviceInfo
 
 
 import voluptuous as vol
@@ -37,7 +38,6 @@ def setup(hass, config):
             hcstatus = hc.get_status()
             hass.states.set("homecharge.serial", hcstatus['serial'])
             
-            c_duration = None
             c_energy = 0
             
             hc_cur_status = hcstatus['status']
@@ -53,7 +53,6 @@ def setup(hass, config):
                 energy = hc_cur_status['energy']
                 
                 if hc_cur_charge['charge_id'] == hc_cur_status['charge_id']:
-                    c_duration = hc_cur_charge['duration']
                     c_energy = hc_cur_charge['energy']
 
             else:
@@ -70,6 +69,7 @@ def setup(hass, config):
                 'hc': hc,
                 'user': email,
                 'pass': pw,
+                'unique_id': hcstatus['serial'],
                 'override': override,
                 'advice_charging': advice_charging,
                 'advice_header': hc_cur_status['advice_header'],
@@ -83,8 +83,16 @@ def setup(hass, config):
                 'started_ts': started_ts,
                 'energy': 0,
                 'c_total': hc_charges['total'],
-                'c_duration': c_duration,
-                'c_energy': c_energy
+                'c_energy': c_energy,
+                'device': DeviceInfo(
+                    identifiers={
+                        # Serial numbers are unique identifiers within a specific domain
+                        (DOMAIN, hcstatus['serial'])
+                    },
+                    name=f"Homecharge {hcstatus['serial']}",
+                    manufacturer="BP Chargemaster",
+                    model="Homecharge",
+                )
             }
 
             hass.helpers.discovery.load_platform('switch', DOMAIN, {}, config)

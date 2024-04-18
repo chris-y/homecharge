@@ -20,18 +20,18 @@ def setup_platform(
     # We only want this platform to be set up via discovery.
     if discovery_info is None:
         return
-    add_entities([AdviceHeaderSensor(),
-        AdviceMessageSensor(),
-        AdviceScheduleSensor(),
-        AdviceChargeLevelSensor(),
-        AdviceMaxkWh(),
-        ChargeIDSensor(),
-        StartedSensor(),
-        EnergySensor(),
-        PowerSensor(),
-        PowerReasonSensor(),
-        TotalChargesSensor(),
-        CurrentEnergySensor()])
+    add_entities([AdviceHeaderSensor(hass),
+        AdviceMessageSensor(hass),
+        AdviceScheduleSensor(hass),
+        AdviceChargeLevelSensor(hass),
+        AdviceMaxkWh(hass),
+        ChargeIDSensor(hass),
+        StartedSensor(hass),
+        EnergySensor(hass),
+        PowerSensor(hass),
+        PowerReasonSensor(hass),
+        TotalChargesSensor(hass),
+        CurrentEnergySensor(hass)])
 
 class AdviceHeaderSensor(SensorEntity):
     _attr_has_entity_name = True
@@ -40,8 +40,9 @@ class AdviceHeaderSensor(SensorEntity):
     def name(self):
         return "Homecharge status"
         
-    def __init__(self):
-        '''init'''
+    def __init__(self, hass: HomeAssistant):
+        serial = hass.data[DOMAIN]['unique_id']
+        self._attr_unique_id = f"{DOMAIN}_{serial}_status"
 
     @property
     def native_value(self):
@@ -54,8 +55,9 @@ class AdviceMessageSensor(SensorEntity):
     def name(self):
         return "Homecharge message"
         
-    def __init__(self):
-        '''init'''
+    def __init__(self, hass: HomeAssistant):
+        serial = hass.data[DOMAIN]['unique_id']
+        self._attr_unique_id = f"{DOMAIN}_{serial}_message"
 
     @property
     def native_value(self):
@@ -68,8 +70,9 @@ class AdviceScheduleSensor(SensorEntity):
     def name(self):
         return "Homecharge schedule"
         
-    def __init__(self):
-        '''init'''
+    def __init__(self, hass: HomeAssistant):
+        serial = hass.data[DOMAIN]['unique_id']
+        self._attr_unique_id = f"{DOMAIN}_{serial}_schedule"
 
     @property
     def native_value(self):
@@ -82,8 +85,9 @@ class AdviceChargeLevelSensor(SensorEntity):
     def name(self):
         return "Homecharge charge level"
         
-    def __init__(self):
-        '''init'''
+    def __init__(self, hass: HomeAssistant):
+        serial = hass.data[DOMAIN]['unique_id']
+        self._attr_unique_id = f"{DOMAIN}_{serial}_chargelevel"
 
     @property
     def device_class(self):
@@ -104,8 +108,9 @@ class AdviceMaxkWh(SensorEntity):
     def name(self):
         return "Homecharge max kWh"
         
-    def __init__(self):
-        '''init'''
+    def __init__(self, hass: HomeAssistant):
+        serial = hass.data[DOMAIN]['unique_id']
+        self._attr_unique_id = f"{DOMAIN}_{serial}_maxkwh"
 
     @property
     def device_class(self):
@@ -126,8 +131,9 @@ class ChargeIDSensor(SensorEntity):
     def name(self):
         return "Homecharge charge ID"
         
-    def __init__(self):
-        '''init'''
+    def __init__(self, hass: HomeAssistant):
+        serial = hass.data[DOMAIN]['unique_id']
+        self._attr_unique_id = f"{DOMAIN}_{serial}_chargeid"
 
     @property
     def native_value(self):
@@ -140,8 +146,9 @@ class PowerSensor(SensorEntity):
     def name(self):
         return "Homecharge power"
         
-    def __init__(self):
-        '''init'''
+    def __init__(self, hass: HomeAssistant):
+        serial = hass.data[DOMAIN]['unique_id']
+        self._attr_unique_id = f"{DOMAIN}_{serial}_power"
 
     @property
     def device_class(self):
@@ -162,8 +169,9 @@ class StartedSensor(SensorEntity):
     def name(self):
         return "Homecharge charge started at"
         
-    def __init__(self):
-        '''init'''
+    def __init__(self, hass: HomeAssistant):
+        serial = hass.data[DOMAIN]['unique_id']
+        self._attr_unique_id = f"{DOMAIN}_{serial}_start"
 
     @property
     def device_class(self):
@@ -183,8 +191,9 @@ class EnergySensor(SensorEntity):
     def name(self):
         return "Homecharge energy"
         
-    def __init__(self):
-        '''init'''
+    def __init__(self, hass: HomeAssistant):
+        serial = hass.data[DOMAIN]['unique_id']
+        self._attr_unique_id = f"{DOMAIN}_{serial}_energy"
 
     @property
     def device_class(self):
@@ -205,8 +214,9 @@ class PowerReasonSensor(SensorEntity):
     def name(self):
         return "Homecharge power reason"
         
-    def __init__(self):
-        '''init'''
+    def __init__(self, hass: HomeAssistant):
+        serial = hass.data[DOMAIN]['unique_id']
+        self._attr_unique_id = f"{DOMAIN}_{serial}_reason"
 
     @property
     def native_value(self):
@@ -220,8 +230,9 @@ class TotalChargesSensor(SensorEntity):
     def name(self):
         return "Homecharge total charges"
         
-    def __init__(self):
-        '''init'''
+    def __init__(self, hass: HomeAssistant):
+        serial = hass.data[DOMAIN]['unique_id']
+        self._attr_unique_id = f"{DOMAIN}_{serial}_totalcharges"
     
     @property
     def state_class(self):
@@ -231,20 +242,6 @@ class TotalChargesSensor(SensorEntity):
     def native_value(self):
         return self.hass.data[DOMAIN]['c_total']
 
-class CurrentDurationSensor(SensorEntity):
-    _attr_has_entity_name = True
-
-    @property
-    def name(self):
-        return "Homecharge charge duration"
-        
-    def __init__(self):
-        '''init'''
-
-    @property
-    def native_value(self):
-        return self.hass.data[DOMAIN]['c_duration']
-        
 class CurrentEnergySensor(SensorEntity):
     _attr_has_entity_name = True
 
@@ -252,8 +249,9 @@ class CurrentEnergySensor(SensorEntity):
     def name(self):
         return "Homecharge charge energy"
         
-    def __init__(self):
-        '''init'''
+    def __init__(self, hass: HomeAssistant):
+        serial = hass.data[DOMAIN]['unique_id']
+        self._attr_unique_id = f"{DOMAIN}_{serial}_chargeenergy"
 
     @property
     def device_class(self):
@@ -286,11 +284,8 @@ class CurrentEnergySensor(SensorEntity):
 
             if self.hass.data[DOMAIN]['charge_id'] is not None:                
                 if hc_cur_charge['charge_id'] == self.hass.data[DOMAIN]['charge_id']:
-                    self.hass.data[DOMAIN]['c_duration'] = hc_cur_charge['duration']
                     self.hass.data[DOMAIN]['c_energy'] = hc_cur_charge['energy']
                 else:
-                    self.hass.data[DOMAIN]['c_duration'] = None
                     self.hass.data[DOMAIN]['c_energy'] = 0
             else: # get energy from most recent charge so we have an accurate total
-                self.hass.data[DOMAIN]['c_duration'] = None
                 self.hass.data[DOMAIN]['c_energy'] = hc_cur_charge['energy']

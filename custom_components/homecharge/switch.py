@@ -17,7 +17,7 @@ def setup_platform(
     # We only want this platform to be set up via discovery.
     if discovery_info is None:
         return
-    add_entities([OverrideSwitch()])
+    add_entities([OverrideSwitch(hass)])
 
 class OverrideSwitch(SwitchEntity):
     _attr_has_entity_name = True
@@ -26,8 +26,9 @@ class OverrideSwitch(SwitchEntity):
     def name(self):
         return "Homecharge schedule override"
         
-    def __init__(self):
-        '''init'''
+    def __init__(self, hass: HomeAssistant):
+        serial = hass.data[DOMAIN]['unique_id']
+        self._attr_unique_id = f"{DOMAIN}_{serial}_override"
         
     @property
     def is_on(self):
