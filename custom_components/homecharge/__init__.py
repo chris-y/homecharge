@@ -5,7 +5,7 @@ from . import homecharge
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.typing import ConfigType
 from homeassistant.helpers.device_registry import DeviceInfo
-
+from homeassistant.helpers.discovery import load_platform
 
 import voluptuous as vol
 import homeassistant.helpers.config_validation as cv
@@ -95,9 +95,9 @@ def setup(hass, config):
                 )
             }
 
-            hass.helpers.discovery.load_platform('switch', DOMAIN, {}, config)
-            hass.helpers.discovery.load_platform('binary_sensor', DOMAIN, {}, config)
-            hass.helpers.discovery.load_platform('sensor', DOMAIN, {}, config)
+            load_platform(hass, 'switch', DOMAIN, {}, config)
+            load_platform(hass, 'binary_sensor', DOMAIN, {}, config)
+            load_platform(hass, 'sensor', DOMAIN, {}, config)
             
             return True
 
